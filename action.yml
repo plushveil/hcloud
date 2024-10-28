@@ -1,0 +1,14 @@
+name: 'Deploy to Hetzner Cloud'
+description: 'A declarative tool for managing Hetzner Cloud resources using a YAML file.'
+inputs:
+  HCLOUD:
+    description: 'The Hetzner Cloud YAML configuration file.'
+    required: false
+    default: 'hcloud.yml'
+outputs:
+  tfstate:
+    description: 'The path to the Terraform state file.'
+    value: ${{ steps.build.outputs.tfstate }}
+runs:
+  using: "composite"
+  steps:

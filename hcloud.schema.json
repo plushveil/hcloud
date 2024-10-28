@@ -1,0 +1,101 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "type": "object",
+  "additionalProperties": false,
+  "properties": {
+    "servers": {
+      "type": "object",
+      "additionalProperties": {
+        "type": "object",
+        "properties": {
+          "server_type": { "type": "string" },
+          "location": { "type": "string" },
+          "ssh_keys": {
+            "type": "array",
+            "items": { "type": "string" }
+          },
+          "environment": {
+            "type": "object",
+            "additionalProperties": { "type": "string" }
+          },
+          "services": {
+            "type": "array",
+            "items": { "type": "string" }
+          },
+          "volumes": {
+            "type": "array",
+            "items": { "type": "string" }
+          }
+        },
+        "required": ["server_type", "location", "ssh_keys", "services"],
+        "additionalProperties": false
+      }
+    },
+    "services": {
+      "type": "object",
+      "additionalProperties": {
+        "type": "object",
+        "properties": {
+          "images": {
+            "type": "array",
+            "items": { "type": "string" }
+          },
+          "ports": {
+            "type": "array",
+            "items": {
+              "oneOf": [
+                { "type": "string" },
+                { "type": "number" }
+              ]
+            }
+          },
+          "uris": {
+            "type": "array",
+            "items": { "type": "string" }
+          },
+          "volumes": {
+            "type": "array",
+            "items": { "type": "string" }
+          },
+          "environment": {
+            "type": "object",
+            "additionalProperties": { "type": "string" }
+          }
+        },
+        "required": ["images"],
+        "additionalProperties": false
+      }
+    },
+    "ssh_keys": {
+      "type": "object",
+      "additionalProperties": {
+        "type": "object",
+        "properties": {
+          "user": { "type": "string" },
+          "private_key": { "type": "string" },
+          "public_key": { "type": "string" }
+        },
+        "required": ["private_key"],
+        "additionalProperties": false
+      }
+    },
+    "volumes": {
+      "type": "object",
+      "additionalProperties": {
+        "type": "object",
+        "properties": {
+          "size": {
+            "oneOf": [
+              { "type": "string" },
+              { "type": "number" }
+            ]
+          },
+          "path": { "type": "string" }
+        },
+        "required": ["size", "path"],
+        "additionalProperties": false
+      }
+    }
+  },
+  "required": ["ssh_keys", "servers", "services"]
+}

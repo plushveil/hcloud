@@ -1,14 +1,27 @@
 name: 'Deploy to Hetzner Cloud'
 description: 'A declarative tool for managing Hetzner Cloud resources using a YAML file.'
 inputs:
-  HCLOUD:
+  config:
     description: 'The Hetzner Cloud YAML configuration file.'
     required: false
     default: 'hcloud.yml'
 outputs:
-  tfstate:
-    description: 'The path to the Terraform state file.'
-    value: ${{ steps.build.outputs.tfstate }}
+  folder:
+    description: 'The folder containing the output files, including the terraform.tfstate file.'
+    value: ${{ steps.build.outputs.folder }}
 runs:
   using: "composite"
   steps:
+      - uses: actions/setup-node@v4.0.4
+        with:
+          node-version: 'latest'
+      - run: cd ${GITHUB_ACTION_PATH} && npm ci
+        shell: bash
+      - id: build
+        run: node ${GITHUB_ACTION_PATH}/src/action.mjs
+        shell: bash
+        env:
+          GITHUB_OUTPUT: $GITHUB_OUTPUT
+          INPUT_CONFIG: ${{ inputs.config }}
+          HCLOUD_TOKEN: ${{ env.HCLOUD_TOKEN }}
+          TF_VAR_HCLOUD_TOKEN: ${{ env.HCLOUD_TOKEN }}

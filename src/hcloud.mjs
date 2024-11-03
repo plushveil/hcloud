@@ -21,6 +21,8 @@ export async function prepare (config = 'hcloud.yml', output = 'dist') {
  * @param {string} [output='dist'] - The input and output directory.
  */
 export async function apply (config = 'hcloud.yml', output = 'dist') {
+  process.env.TF_VAR_HCLOUD_TOKEN = process.env.HCLOUD_TOKEN
+
   await prepare(config, output)
   if (!fs.existsSync(path.resolve(output, '.terraform'))) {
     try {
